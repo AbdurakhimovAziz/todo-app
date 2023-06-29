@@ -6,6 +6,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  font-size: 16px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -16,6 +17,15 @@
   }
 }
 
+html,
+body {
+  height: 100%;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
+}
+
+svg {
+  vertical-align: baseline;
 }

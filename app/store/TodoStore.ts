@@ -4,42 +4,33 @@ import { Todo as ITodo } from '../models/Todo';
 import { TODO_STATUS } from '../utils/todoStatuses';
 
 export class TodoStore {
-  todos: ITodo[] = [
-    {
-      id: '1',
-      title: 'Learn React',
-      status: TODO_STATUS.TODO,
-      createdAt: new Date(),
-      deletedAt: null,
-    },
-    {
-      id: '2',
-      title: 'Learn MobX',
-      status: TODO_STATUS.TODO,
-      createdAt: new Date(),
-      deletedAt: null,
-    },
-  ];
+  public todos: ITodo[] = [new Todo('Make coffee'), new Todo('Learn nextjs')];
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  addTodo = (title: string) => {
+  public addTodo = (title: string) => {
     const newTodo = new Todo(title);
     this.todos.push(newTodo);
   };
 
-  removeTodo = (id: string) => {
+  public removeTodo = (id: string) => {
     this.todos = this.todos.filter((todo) => todo.id !== id);
+  };
+
+  public updateTodo = (todo: Todo) => {
+    const index = this.todos.findIndex((t) => t.id === todo.id);
+    this.todos[index] = todo;
+    return this.todos[index];
   };
 }
 
 export class Todo implements ITodo {
-  id: string;
-  status: TODO_STATUS;
-  createdAt: Date;
-  deletedAt: Date | null;
+  public id: string;
+  public status: TODO_STATUS;
+  public createdAt: Date;
+  public deletedAt: Date | null;
 
   constructor(public title = '') {
     makeAutoObservable(this);
