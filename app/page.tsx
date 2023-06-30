@@ -1,5 +1,5 @@
-import { TodoList } from './components/TodoList/TodoList';
-import { Layout, Header, Content, Title } from './lib/antd';
+import { Todos } from './components/Todos/Todos';
+import { Content, Header, Layout, Title } from './lib/antd';
 
 const Home = () => (
   <Layout className="flex h-full">
@@ -7,8 +7,7 @@ const Home = () => (
       <Title level={1}>Todo App</Title>
     </Header>
     <Content className="grow w-full mx-auto px-20 py-10">
-      <Title level={2}>Todos</Title>
-      <TodoList />
+      <Todos />
     </Content>
   </Layout>
 );

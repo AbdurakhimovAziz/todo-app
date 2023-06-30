@@ -6,7 +6,7 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   corePlugins: {
-    preflight: false,
+    preflight: false
   },
   plugins: [],
 }

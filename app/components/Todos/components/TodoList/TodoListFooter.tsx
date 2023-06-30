@@ -1,16 +1,17 @@
 import { todoStore } from '@/app/store';
-import { CheckOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { Button, Form, Input, InputRef } from 'antd';
-import { useRef } from 'react';
+import { TODO_STATUS } from '@/app/utils/todoStatuses';
+import { Button, Form, Input } from 'antd';
+import { FocusEvent } from 'react';
+import { TodoFormActions } from '../TodoFormActions/TodoFormActions';
+import { TodoListTypes } from './types';
 
-export const TodoListFooter = () => {
-  const inputRef = useRef<InputRef>(null);
+export const TodoListFooter = ({ todoStatus }: TodoListTypes) => {
   const [form] = Form.useForm();
 
-  const addtodo = () => {
+  const addtodo = (e?: FocusEvent<HTMLFormElement, Element>) => {
     const inputValue = form.getFieldValue('todos')[0];
-    if (!inputValue) return;
-    todoStore.addTodo(inputValue);
+    if (!inputValue || e?.relatedTarget?.id === 'cancel') return;
+    todoStore.addTodo(inputValue, TODO_STATUS[todoStatus]);
     form.setFieldsValue({ todos: [] });
   };
 
@@ -20,7 +21,7 @@ export const TodoListFooter = () => {
   };
 
   return (
-    <Form form={form} onFinish={addtodo} onBlur={addtodo}>
+    <Form form={form} onFinish={addtodo} onBlur={addtodo} preserve={false}>
       <Form.List name="todos">
         {(fields, { remove }) => {
           return (
@@ -33,24 +34,15 @@ export const TodoListFooter = () => {
                   key={field.key}
                   name={field.name}
                   extra={
-                    <>
-                      <Button
-                        type="text"
-                        onClick={addtodo}
-                        icon={<CheckOutlined color="blue" />}
-                      />
-                      <Button
-                        type="text"
-                        onClick={() => remove(field.name)}
-                        danger
-                        icon={<CloseCircleOutlined />}
-                      />
-                    </>
+                    <TodoFormActions
+                      onConfirm={() => addtodo()}
+                      onCancel={() => remove(field.name)}
+                    />
                   }
                 >
                   <Input
                     allowClear
-                    ref={inputRef}
+                    autoFocus
                     className="w-[320px]"
                     placeholder="input title"
                   />

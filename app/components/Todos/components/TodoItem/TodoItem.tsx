@@ -1,8 +1,8 @@
 import { todoStore } from '@/app/store';
-import { CheckOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { Button, Form, List } from 'antd';
+import { Form, List } from 'antd';
 import Input from 'antd/es/input/Input';
-import { useState } from 'react';
+import { FocusEvent, useState } from 'react';
+import { TodoFormActions } from '../TodoFormActions/TodoFormActions';
 import { TodoItemActions } from './TodoItemActions';
 import { TodoItemProps } from './types';
 
@@ -16,11 +16,16 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
 
   const [form] = Form.useForm();
 
-  const updateTodo = () => {
+  const updateTodo = (e?: FocusEvent<HTMLFormElement, Element>) => {
     const updatedTitle = form.getFieldValue('title');
     setIsEditing(false);
     form.resetFields();
-    if (!updatedTitle || updatedTitle.trim() === todo.title) return;
+    if (
+      !updatedTitle ||
+      updatedTitle.trim() === todo.title ||
+      e?.relatedTarget?.id === 'cancel'
+    )
+      return;
     const updatedTodo = todoStore.updateTodo({
       ...todo,
       title: updatedTitle,
@@ -42,21 +47,11 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
             name="title"
             className="mb-0 grow"
             rules={[{ required: true, message: 'Please input title!' }]}
+            shouldUpdate
           >
             <Input autoFocus />
           </Form.Item>
-          <Button
-            type="text"
-            htmlType="submit"
-            icon={<CheckOutlined color="blue" />}
-          />
-          <Button
-            type="text"
-            htmlType="button"
-            onClick={() => setIsEditing(false)}
-            danger
-            icon={<CloseCircleOutlined />}
-          />
+          <TodoFormActions onCancel={updateTodo} />
         </Form>
       ) : (
         <List.Item.Meta title={todo.title} />

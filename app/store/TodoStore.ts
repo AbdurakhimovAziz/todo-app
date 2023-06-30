@@ -10,8 +10,8 @@ export class TodoStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  public addTodo = (title: string) => {
-    const newTodo = new Todo(title);
+  public addTodo = (title: string, status: TODO_STATUS) => {
+    const newTodo = new Todo(title, status);
     this.todos.push(newTodo);
   };
 
@@ -28,15 +28,14 @@ export class TodoStore {
 
 export class Todo implements ITodo {
   public id: string;
-  public status: TODO_STATUS;
   public createdAt: Date;
   public deletedAt: Date | null;
 
-  constructor(public title = '') {
+  constructor(public title = '', public status = TODO_STATUS.TODO) {
     makeAutoObservable(this);
     this.id = nanoid();
     this.title = title;
-    this.status = TODO_STATUS.TODO;
+    this.status = status;
     this.createdAt = new Date();
     this.deletedAt = null;
   }

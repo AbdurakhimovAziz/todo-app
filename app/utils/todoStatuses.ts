@@ -5,3 +5,7 @@ export enum TODO_STATUS {
   TEST = 'test',
   DONE = 'done',
 }
+
+export const todoStatusList = Object.keys(
+  TODO_STATUS
+) as (keyof typeof TODO_STATUS)[];
