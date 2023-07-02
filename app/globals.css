@@ -24,6 +24,7 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
+  overflow: hidden;
 }
 
 svg {

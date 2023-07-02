@@ -1,5 +1,5 @@
 'use client';
-import { todoStore } from '@/app/store';
+import { todoStore, uiStore } from '@/app/store';
 import { List } from 'antd';
 import { Observer, observer } from 'mobx-react-lite';
 import { TodoItem } from '../TodoItem/TodoItem';
@@ -7,13 +7,9 @@ import { TodoListFooter } from './TodoListFooter';
 import { TodoListTypes } from './types';
 import { TODO_STATUS } from '@/app/utils/todoStatuses';
 import { Title } from '@/app/lib/antd';
-import { autorun } from 'mobx';
 
 export const TodoList = observer(({ todoStatus }: TodoListTypes) => {
   const filteredTodos = todoStore.getFilteredTodos(TODO_STATUS[todoStatus]);
-  // autorun(() => {
-  //   console.log('autorun', todoStore.todos);
-  // });
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -21,8 +17,13 @@ export const TodoList = observer(({ todoStatus }: TodoListTypes) => {
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    console.log('drop', e.currentTarget);
     e.preventDefault();
+    const draggedTodo = uiStore.draggedTodo;
+    if (!draggedTodo) return;
+    todoStore.updateTodo({
+      ...draggedTodo,
+      status: TODO_STATUS[todoStatus],
+    });
   };
 
   return (
@@ -33,7 +34,7 @@ export const TodoList = observer(({ todoStatus }: TodoListTypes) => {
         size="large"
         header={
           <Title level={4} className="capitalize">
-            {todoStatus}
+            {TODO_STATUS[todoStatus]}
           </Title>
         }
         dataSource={filteredTodos}

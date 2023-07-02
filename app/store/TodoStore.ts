@@ -11,13 +11,14 @@ export class TodoStore {
   ];
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      getFilteredTodos: false,
+    });
   }
 
   public addTodo = (title: string, status: TODO_STATUS) => {
     const newTodo = new Todo({ title, status });
     this.todos.push(newTodo);
-    console.log('addTodo', JSON.parse(JSON.stringify(this.todos)));
   };
 
   public removeTodo = (id: string) => {
@@ -25,7 +26,6 @@ export class TodoStore {
       this.todos.findIndex((t) => t.id === id),
       1
     );
-    console.log('remove', JSON.parse(JSON.stringify(this.todos)));
   };
 
   public updateTodo = (todo: Todo) => {
@@ -34,24 +34,18 @@ export class TodoStore {
     });
     const index = this.todos.findIndex((t) => t.id === updatedTodo.id);
     this.todos.splice(index, 1, updatedTodo);
-    console.log(
-      'updateTodo',
-      updatedTodo,
-      JSON.parse(JSON.stringify(this.todos))
-    );
-
     return this.todos[index];
   };
 
-  public swapTodos = (draggedTodo: Todo, todo2: Todo) => {
+  public swapAndUpdateTodos = (draggedTodo: Todo, todo2: Todo) => {
     const index1 = this.todos.findIndex((t) => t.id === draggedTodo.id);
     const index2 = this.todos.findIndex((t) => t.id === todo2.id);
-    console.log('swapTodos', this.todos);
-    draggedTodo.status = todo2.status;
-
+    const updatedTodo = new Todo({
+      ...draggedTodo,
+      status: todo2.status,
+    });
     this.todos[index1] = todo2;
-    this.todos[index2] = draggedTodo;
-    console.log('swapTodos', this.todos);
+    this.todos[index2] = updatedTodo;
   };
 
   public getFilteredTodos = (status: TODO_STATUS) => {

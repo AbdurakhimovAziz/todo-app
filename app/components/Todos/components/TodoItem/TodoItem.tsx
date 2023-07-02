@@ -6,8 +6,6 @@ import { TodoFormActions } from '../TodoFormActions/TodoFormActions';
 import { TodoItemActions } from './TodoItemActions';
 import { TodoItemProps } from './types';
 import { Todo } from '@/app/models/Todo';
-import { observer } from 'mobx-react-lite';
-import { action, runInAction, when } from 'mobx';
 
 export const TodoItem = ({ todo }: TodoItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -64,26 +62,15 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
     e.currentTarget.classList.remove('dragover-todo');
   };
 
-  const handleDrop = action(
-    async (e: React.DragEvent<HTMLDivElement>, todo: Todo) => {
-      console.log('drop');
-      e.preventDefault();
-      e.currentTarget.classList.remove('dragover-todo');
-      const draggedTodo = uiStore.draggedTodo;
-      if (!draggedTodo) return;
-
-      // if (draggedTodo.status !== todo.status) {
-      //   todoStore.updateTodo({
-      //     ...draggedTodo,
-      //     status: todo.status,
-      //   });
-      // }
-      // await when(() => draggedTodo.status === todo.status);
-      todoStore.swapTodos(draggedTodo, todo);
-      uiStore.setDraggedTodo(null);
-    }
-  );
-
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>, todo: Todo) => {
+    console.log('drop');
+    e.preventDefault();
+    e.currentTarget.classList.remove('dragover-todo');
+    const draggedTodo = uiStore.draggedTodo;
+    if (!draggedTodo) return;
+    todoStore.swapAndUpdateTodos(draggedTodo, todo);
+    uiStore.setDraggedTodo(null);
+  };
   return (
     <List.Item
       actions={!isEditing ? todoItemActions : undefined}
@@ -94,7 +81,8 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
       onDragLeave={(e) => handleDragEnd(e)}
       onDragEnd={(e) => handleDragEnd(e)}
       onDrop={(e) => handleDrop(e, todo)}
-      className={!isEditing ? 'cursor-grab' : ''}
+      // className={!isEditing ? 'cursor-grab' : ''}
+      className="min-w-min"
     >
       {isEditing ? (
         <Form
@@ -115,7 +103,10 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
           <TodoFormActions onCancel={cancelUpdate} />
         </Form>
       ) : (
-        <List.Item.Meta className="pointer-events-none" title={todo.title} />
+        <List.Item.Meta
+          className="max-w-xs w-full break-all"
+          title={todo.title}
+        />
       )}
     </List.Item>
   );

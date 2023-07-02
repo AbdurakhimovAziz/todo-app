@@ -9,7 +9,7 @@ export const TodoListFooter = ({ todoStatus }: TodoListTypes) => {
   const [form] = Form.useForm();
 
   const addtodo = (e?: FocusEvent<HTMLFormElement, Element>) => {
-    const inputValue = form.getFieldValue('todos')[0];
+    const inputValue = form.getFieldValue('todos')?.[0];
     if (!inputValue || e?.relatedTarget?.id === 'cancel') return;
     todoStore.addTodo(inputValue, TODO_STATUS[todoStatus]);
     form.setFieldsValue({ todos: [] });
