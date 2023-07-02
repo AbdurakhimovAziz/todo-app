@@ -29,3 +29,12 @@ body {
 svg {
   vertical-align: baseline;
 }
+
+.dragover-todo * {
+  pointer-events: none;
+}
+
+.dragover-todo {
+  cursor: grabbing;
+  background-color: lightgrey;
+}

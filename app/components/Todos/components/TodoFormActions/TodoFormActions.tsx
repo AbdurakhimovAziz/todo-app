@@ -10,7 +10,6 @@ export const TodoFormActions = ({
     <>
       <Button
         type="text"
-        htmlType="submit"
         onClick={onConfirm}
         icon={<CheckOutlined color="blue" />}
       />

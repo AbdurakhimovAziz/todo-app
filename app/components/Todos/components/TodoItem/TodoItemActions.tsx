@@ -14,6 +14,7 @@ export const TodoItemActions = ({
         type="primary"
         shape="circle"
         key="edit"
+        size="small"
         onClick={() => setIsEditing(true)}
         icon={<EditOutlined />}
       />
@@ -22,6 +23,7 @@ export const TodoItemActions = ({
       type="primary"
       shape="circle"
       key="edit"
+      size="small"
       danger
       onClick={() => todoStore.removeTodo(todoId)}
       icon={<DeleteOutlined />}

@@ -29,7 +29,10 @@ export const TodoListFooter = ({ todoStatus }: TodoListTypes) => {
               {fields.map((field) => (
                 <Form.Item
                   wrapperCol={{
-                    style: { flexDirection: 'row' },
+                    style: {
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    },
                   }}
                   key={field.key}
                   name={field.name}
@@ -43,7 +46,7 @@ export const TodoListFooter = ({ todoStatus }: TodoListTypes) => {
                   <Input
                     allowClear
                     autoFocus
-                    className="w-[320px]"
+                    className="w-full grow"
                     placeholder="input title"
                   />
                 </Form.Item>
